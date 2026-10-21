@@ -35,6 +35,7 @@ int main(void)
     UNITY_BEGIN();
 
     // ========== PART 2 ==========
+
     RUN_TEST(test_new_list_is_empty);
     RUN_TEST(test_push_increases_length);
     RUN_TEST(test_pop_on_empty_list);
@@ -43,6 +44,7 @@ int main(void)
     RUN_TEST(test_delete_middle_keeps_links);
 
     // ========== PART 3 ==========
+    
     RUN_TEST(test_std_delete_only_first);
     RUN_TEST(test_std_pop_on_empty_list);
 
