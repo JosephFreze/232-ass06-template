@@ -1,0 +1,56 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout student repository
+      uses: actions/checkout@v4
+
+    - name: Install 32-bit compilation tools (multilib)
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get install -y gcc-multilib g++-multilib
+
+    - name: Download latest test binary
+      run: |
+        mkdir -p tests
+
+        # 1. Automatyczne wykrycie numeru zadania z nazwy repo (np. ass01 -> 01)
+        TASK_NUM=$(echo "${{ github.event.repository.name }}" | grep -oP '(ass|lab)\K[0-9]+')
+        if [ -z "$TASK_NUM" ]; then
+          TASK_NUM="01"
+        fi
+
+        echo "Wykryto numer zadania/labu: $TASK_NUM"
+
+        # 2. Zawsze pobieramy aktualny plik testowy z publicznego repozytorium
+        TEST_URL="https://raw.githubusercontent.com/jpach-cs/232-all-public-tests/main/tests${TASK_NUM}.o"
+        echo "Pobieranie testu z: $TEST_URL"
+        curl -L -s -o tests/tests.o "$TEST_URL"
+
+        # 3. Zabezpieczenie przed pustym plikiem / błędem 404
+        if [ ! -s tests/tests.o ]; then
+          echo "BŁĄD: Nie udało się pobrać pliku testowego lub plik jest pusty!"
+          exit 1
+        fi
+
+    - name: Compile student code with pre-compiled test
+      run: |
+        # Kompilacja kodu studenta z pobranym testem i biblioteką Unity
+        g++ -Wall -std=c++20 -m32 -Isrc -Ilib -Iinclude \
+            src/code.cpp src/tests.cpp src/unity.c \
+            tests/tests.o \
+            -o run_tests
+
+    - name: Execute Test Binary
+      run: |
+        ./run_tests
