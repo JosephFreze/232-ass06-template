@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 #ifndef UNITY_H
 #define UNITY_H
 #include "unity.h"
@@ -30,6 +29,8 @@ void tearDown(void) {}
 // ============================================================
 // Main Test Runner
 // ============================================================
+//using NodeValue = std::variant<int, double, std::string>;
+
 int main(void)
 {
     UNITY_BEGIN();
