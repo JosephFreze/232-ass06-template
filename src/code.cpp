@@ -107,12 +107,11 @@ DoubleNode *DoublyLinkedList::detachFirst()
     headPtr = headPtr->getPrev();                 // 2. advance head
 
     if (headPtr != nullptr)
-        headPtr->setPrev(headPtr) = nullptr;             // new head has no predecessor
+        headPtr->setPrev(nullptr);             // new head has no predecessor
     else
         tailPtr = nullptr;                      // list became empty
 
-    detachedPtr->setPrev(headPtr) = nullptr;             // 3. isolate the node
-    detachedPtr->setPrev(tailPtr) = nullptr;
+    detachedPtr->setPrev(nullptr);             // 3. isolate the node
     --count;
     return detachedPtr;
 }

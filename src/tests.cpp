@@ -13,7 +13,9 @@
 /// Create a DoublyLinkedList. Verify length() is 0 on a new list.
 void test_new_list_is_empty(void)
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+    DoublyLinkedList list;
+    int len = list.length();
+    TEST_ASSERT_EQUAL_INT(0, len);
 }
 
 /// Create a DoublyLinkedList. Call pushFrontValue and pushBackValue.
