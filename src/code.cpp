@@ -94,24 +94,17 @@ DoublyLinkedList::~DoublyLinkedList()
 /// Fix headPtr, tailPtr, count. Clear the node's own prevPtr and nextPtr.
 /// Return nullptr if the list is empty.
 DoubleNode *DoublyLinkedList::detachFirst()
-
-
-// CONTINUE WORKING HERE!!!!!
-
-
 {
     if (headPtr == nullptr)
         return nullptr;
 
-    DoubleNode *detachedPtr = headPtr;          // 1. save
-    headPtr = headPtr->getPrev();                 // 2. advance head
+    DoubleNode *detachedPtr = headPtr;
+    headPtr = headPtr->getPrev();
 
     if (headPtr != nullptr)
-        headPtr->setPrev(nullptr);             // new head has no predecessor
-    else
-        tailPtr = nullptr;                      // list became empty
+        headPtr->setPrev(nullptr);
 
-    detachedPtr->setPrev(nullptr);             // 3. isolate the node
+    detachedPtr->setNext(nullptr);
     --count;
     return detachedPtr;
 }
@@ -120,22 +113,67 @@ DoubleNode *DoublyLinkedList::detachFirst()
 /// Use the tail's prev link. Return nullptr if the list is empty.
 DoubleNode *DoublyLinkedList::detachLast()
 {
-    // TODO: implement
-    return nullptr;
+    if (tailPtr == nullptr)
+        return nullptr;
+
+    DoubleNode *detachedPtr = tailPtr;
+    tailPtr = tailPtr->getPrev();
+
+    if (tailPtr != nullptr)
+        tailPtr->setNext(nullptr);
+
+    detachedPtr->setPrev(nullptr);
+    --count;
+    return detachedPtr;
 }
 
 /// Find the FIRST node equal to value and unlink it (head, tail, only node
 /// or middle node). Return nullptr if not found. Reuse detachFirst/detachLast.
 DoubleNode *DoublyLinkedList::detachValue(NodeValue value)
 {
-    // TODO: implement
-    return nullptr;
+    DoubleNode *currentPtr = headPtr;
+
+    while (currentPtr != nullptr && currentPtr->getValue() != value)
+    {
+        currentPtr = currentPtr->getNext();
+    }
+    
+    if (currentPtr == nullptr)
+    {
+        return nullptr;
+    }
+
+    if (currentPtr == headPtr)
+    {
+        return detachFirst();
+    }
+    
+    if (currentPtr == tailPtr)
+    {
+        return detachLast();
+    }
+    
+    DoubleNode *a = currentPtr->getPrev();
+    DoubleNode *c = currentPtr->getNext();
+
+    a->setNext(c);
+    c->setPrev(a);
+
+    currentPtr->setPrev(nullptr);
+    currentPtr->setNext(nullptr);
+
+    --count;
+    return currentPtr;
 }
 
 /// Create a node with new and link it in front. Handle the empty list.
 void DoublyLinkedList::pushFrontValue(NodeValue value)
 {
-    // TODO: implement
+    DoubleNode *newPtr = new DoubleNode(value);
+
+
+    ///// CONTINUE WORKING HERE!!!!!!
+
 }
 
 /// Create a node with new and link it at the end. Handle the empty list.
