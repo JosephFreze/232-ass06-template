@@ -22,7 +22,11 @@ void test_new_list_is_empty(void)
 /// Verify length() is 2.
 void test_push_increases_length(void)
 {
-    TEST_ASSERT_TRUE_MESSAGE(0, "TODO: Implement this test");
+    DoublyLinkedList list2;
+    list2.pushFrontValue(4);
+    list2.pushBackValue(5);
+    int len2 = list2.length();
+    TEST_ASSERT_EQUAL_INT(2, len2);
 }
 
 /// Create an EMPTY DoublyLinkedList.

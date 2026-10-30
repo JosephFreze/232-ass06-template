@@ -82,7 +82,7 @@ DoublyLinkedList::~DoublyLinkedList()
     while (currentPtr != nullptr)
     {
         DoubleNode *nextPtr = currentPtr->getNext();  // save BEFORE delete
-        delete currentPtr;
+        delete (currentPtr);
         currentPtr = nextPtr;
     }
     headPtr = nullptr;
@@ -171,21 +171,25 @@ void DoublyLinkedList::pushFrontValue(NodeValue value)
 {
     DoubleNode *newPtr = new DoubleNode(value);
 
-    newPtr->setNext(headPtr);
-
-    if (headPtr != nullptr)
+    if (headPtr == nullptr)
     {
-        headPtr->setPrev(newPtr);
-    }
-
-    else
-    {
+        headPtr = newPtr;
         tailPtr = newPtr;
     }
+    else if (headPtr == tailPtr)
+    {
+        headPtr = newPtr;
+        headPtr->setNext(tailPtr);
+        tailPtr->setPrev(headPtr);
+    }
+    else
+    {
+        newPtr->setNext(headPtr);
+        headPtr->setPrev(newPtr);
+        headPtr = newPtr;
+    }
 
-    headPtr = newPtr;
     ++count;
-
 }
 
 /// Create a node with new and link it at the end. Handle the empty list.
@@ -193,19 +197,24 @@ void DoublyLinkedList::pushBackValue(NodeValue value)
 {
     DoubleNode *newPtr = new DoubleNode(value);
 
-    newPtr->setNext(tailPtr);
-
-    if (tailPtr != nullptr)
-    {
-        tailPtr->setNext(newPtr);
-    }
-    
-    else
+    if (tailPtr == nullptr)
     {
         headPtr = newPtr;
+        tailPtr = newPtr;
+    }
+    else if (headPtr == tailPtr)
+    {
+        tailPtr = newPtr;
+        headPtr->setNext(tailPtr);
+        tailPtr->setPrev(headPtr);
+    }
+    else
+    {
+        newPtr->setPrev(tailPtr);
+        tailPtr->setNext(newPtr);
+        tailPtr = newPtr;
     }
 
-    tailPtr = newPtr;
     ++count;
 }
 
@@ -278,7 +287,6 @@ int DoublyLinkedList::printForward() const
     if (headPtr == nullptr)
     {
         std::cout << "List is empty.\n";
-        return;
     }
 
     for (DoubleNode *p = headPtr; p != nullptr; p = p->getNext())
@@ -306,7 +314,7 @@ int DoublyLinkedList::printBackward() const
 
         std::cout << " ";
     }
-    
+
     std::cout << "\n";
 }
 
